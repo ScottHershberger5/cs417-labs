@@ -87,25 +87,51 @@ class Mage(Character):
 
 class Ranger(Character):
     
-    def __init__(self,name)
+    def __init__(self,name):
         
-        super.__init__(name, "Arrow Storm")
+        super().__init__(name, "Arrow Storm")
 
     def summon_power(self):
 
         return f"{self.name} channels {self.special_power}! Arrows rain down on enemies!"
 
-class Sword(Weapon):
+class Staff(Weapon):
 
     def __init__(self):
-        super.__init__(self, "Sword", 15)
+        super().__init__("Staff", 15)
 
 class Hammer(Weapon):
 
     def __init__(self):
-        super.__init__(self, "Hammer", 30)
+        super().__init__("Hammer", 30)
 
 class Bow(Weapon):
 
     def __init__(self):
-        super.__init__(self, "Bow", 12)
+        super().__init__("Bow", 12)
+
+
+army = [
+    Ranger("Scott"),
+    Warrior("Doug"),
+    Mage("Ted")
+]
+
+bow = Bow()
+hammer = Hammer()
+staff = Staff()
+
+arsenal = [
+    bow,
+    hammer,
+    staff
+]
+
+for character in army:
+        weapon = arsenal[0]
+        character.equip_weapon(weapon)
+        arsenal = arsenal[1:]
+for character in army:
+    print(character)
+    print(character.get_status())
+    print(character.summon_power())
