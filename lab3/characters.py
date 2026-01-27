@@ -95,3 +95,17 @@ class Ranger(Character):
 
         return f"{self.name} channels {self.special_power}! Arrows rain down on enemies!"
 
+class Sword(Weapon):
+
+    def __init__(self):
+        super.__init__(self, "Sword", 15)
+
+class Hammer(Weapon):
+
+    def __init__(self):
+        super.__init__(self, "Hammer", 30)
+
+class Bow(Weapon):
+
+    def __init__(self):
+        super.__init__(self, "Bow", 12)
