@@ -142,3 +142,9 @@ print()
 print(army[1].attack())
 army[1].equip_weapon(arsenal[2])
 print(army[1].attack())
+
+""" the weapons are modeled as has-a composition because with composition, you can easily swap aspects of a class 
+such as something like a weapon that every instance of a class has but is not the same for each. It is great for runtime
+flexibility. If we used inheretance instead, we would have to initialize a new character everytime we wanted to switch the 
+weapon, which is much more time consuming and less efficent. """
+
