@@ -127,11 +127,18 @@ arsenal = [
     staff
 ]
 
+weapon_index = 0
+
 for character in army:
-        weapon = arsenal[0]
+        weapon = arsenal[weapon_index]
         character.equip_weapon(weapon)
-        arsenal = arsenal[1:]
+        weapon_index += 1
 for character in army:
     print(character)
     print(character.get_status())
     print(character.summon_power())
+
+print()
+print(army[1].attack())
+army[1].equip_weapon(arsenal[2])
+print(army[1].attack())
