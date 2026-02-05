@@ -42,4 +42,4 @@ def parse_availability(response):
         >>> parse_availability({})  # Missing field
         False
     """
-    pass  # Your implementation here
+    return response.get("in_stock", False)
