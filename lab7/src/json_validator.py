@@ -39,10 +39,16 @@ def validate(json_string):
     column = 0
     errors = []
     in_string = False
-    
+    skip_next = False
+
     for char in json_string:
-        
+
         column += 1
+
+        if skip_next:
+            skip_next = False
+            continue
+        
         # checks to see if the character is a newline, if it is then we increase the line num and reset column num
         if char == "/n":
             line += 1
@@ -51,6 +57,7 @@ def validate(json_string):
         # if char is a \ then we skip the next character
         if in_string == True:
             if char == """\\""": ############## Only error ################
+                skip_next = True
                 continue #skip the next character #idk how to do this
             elif char == '''"''':
                 in_string = False
