@@ -38,16 +38,27 @@ def validate(json_string):
     line = 1
     column = 0
     errors = []
+    in_string = False
     
     for char in json_string:
         
         column += 1
         # checks to see if the character is a newline, if it is then we increase the line num and reset column num
-        if char == "/n": ######## Possible Error ###########
+        if char == "/n":
             line += 1
             column = 0
             continue
+        # if char is a \ then we skip the next character
+        if in_string == True:
+            if char == """\\""": ############## Only error ################
+                continue #skip the next character #idk how to do this
+            elif char == '''"''':
+                in_string = False
+            continue
         
+        if char == '\"':
+            in_string = True
+            continue
         # checks to see if the character is an opener, if it is then it adds it to the list
         if char == "{" or char == "[":
             stack.push((char, line, column))
@@ -58,7 +69,7 @@ def validate(json_string):
                 errors.append(f"ERROR: unexpected closer at line{line}, column{column}")
                 return (False, errors)
             open_char, open_line, open_column = stack.pop()
-            if open_char == MATCHING[char]:
+            if open_char != MATCHING[char]:
                 errors.append(f"ERROR: expected matching closer for {open_char}, opened at line {open_line}, but found character at line {line}/column {column}")
                 return (False, errors)
 
@@ -66,6 +77,10 @@ def validate(json_string):
         continue
         
         
+        
+    if in_string == True:
+        errors.append(f"ERROR, unterminated string")
+        return (False, errors)
         #checks to see if the stack has any openers still left on it, if it does, it roports all the errors
     if stack.is_empty() == False:
         for item in range(0, stack.size()):
