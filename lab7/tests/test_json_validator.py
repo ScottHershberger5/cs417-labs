@@ -32,8 +32,9 @@ class TestBasicValid:
 
     def test_easy_correct_file(self):
         is_valid, errors = validate_file(data_path("easy_correct.json"))
-        assert is_valid is True
         assert errors == []
+        assert is_valid is True
+        # assert errors == []
 
     def test_empty_object(self):
         is_valid, errors = validate("{}")
