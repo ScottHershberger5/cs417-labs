@@ -43,7 +43,7 @@ class HashTableOpen:
         Returns:
             int: A slot index between 0 and self.size - 1.
         """
-        pass  # TODO: implement this (1 line)
+        return hash(key) % self.size
 
     # ── TODO 2: Put ───────────────────────────────────────────────
 
@@ -67,7 +67,33 @@ class HashTableOpen:
             key:   The key to insert.
             value: The value to associate with the key.
         """
-        pass  # TODO: implement this
+        
+        
+        for step in range(self.size):
+            bucket = (self._hash(key) + step) % self.size
+            # if bucket > self.size:
+            #     placed = True
+            #     raise Exception("Hash table is full")
+            if self.table[bucket] == None:
+                
+                self.count += 1
+                self.table[bucket] = (key, value)
+                break
+            elif self.table[bucket] == _TOMBSTONE:
+                self.count += 1
+                self.table[bucket] = (key, value)
+                break
+            elif self.table[bucket][0] == key:
+                
+                self.table[bucket] = None
+                self.table[bucket] = (key, value)
+                break
+            else:
+                bucket += 1
+
+                
+
+
 
     # ── TODO 3: Get ───────────────────────────────────────────────
 
@@ -95,7 +121,23 @@ class HashTableOpen:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
+        for step in range(self.size):
+            bucket = (self._hash(key) + step) % self.size
+            # if bucket > self.size:
+            #     placed = True
+            #     raise Exception("Hash table is full")
+            if self.table[bucket] == None:
+                
+                raise KeyError("Key not in hash table")
+                break
+            elif self.table[bucket] == _TOMBSTONE:
+                bucket += 1
+            elif self.table[bucket][0] == key:
+                
+                return self.table[bucket][1]
+                
+            else:
+                bucket += 1
 
     # ── TODO 4: Delete ────────────────────────────────────────────
 
@@ -119,7 +161,23 @@ class HashTableOpen:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
+        for step in range(self.size):
+            bucket = (self._hash(key) + step) % self.size
+            # if bucket > self.size:
+            #     placed = True
+            #     raise Exception("Hash table is full")
+            if self.table[bucket] == None:
+                
+                raise KeyError("Key not in hash table")
+                break
+            elif self.table[bucket][0] == key:
+                
+                self.table[bucket] = _TOMBSTONE
+                self.count -= 1
+                break
+                
+            else:
+                bucket += 1
 
     # ── Provided Methods (do not modify) ──────────────────────────
 
