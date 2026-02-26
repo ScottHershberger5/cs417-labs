@@ -61,7 +61,26 @@ def binary_search(a_list, target):
     Returns:
         True if target is found, False otherwise.
     """
-    pass  # TODO: implement this
+    start = 0
+    last = len(a_list) - 1
+    if start == last: # chackes list if its empty or has one element
+        return True if a_list[0] == target else False
+    while start <= last:
+        mid = (start + last) // 2
+        if a_list[mid] == target:
+            return True
+        elif target < a_list[mid]:
+            last = mid - 1
+        elif target > a_list[mid]:
+            start = mid + 1
+    return False
+    # print(start, last)
+    # if a_list[start] == target: #checks the last two items
+    #     return True
+    # elif a_list[last] == target:
+    #     return True
+    # else:
+    #     return False
 
 
 # ── TODO 3: Counted Versions ─────────────────────────────────────
