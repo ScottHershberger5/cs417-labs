@@ -65,7 +65,19 @@ def short_bubble_sort(a_list):
     Returns:
         The same list, now sorted in ascending order.
     """
-    pass  # TODO: implement this
+    for i in range(len(a_list) - 1):
+        sorted = True
+        for j in range(len(a_list) - 1 - i):
+            if a_list[j] > a_list[j+1]:
+                temp = a_list[j+1]
+                a_list[j + 1] = a_list[j]
+                a_list[j] = temp
+                sorted = False
+            if j == len(a_list) - 1 - i and sorted == True: #if we reach the end of the sort and sorted has not benn set to False, we return immediately
+                return a_list
+
+        
+    return a_list
 
 
 # ── TODO 3: Insertion Sort ──────────────────────────────────────
@@ -98,7 +110,18 @@ def insertion_sort(a_list):
     Returns:
         The same list, now sorted in ascending order.
     """
-    pass  # TODO: implement this
+    
+    for i in range(1, len(a_list)):
+        current_value = a_list[i]
+        position = i - 1
+        while position >= 0 and a_list[position] > current_value:
+            a_list[position + 1] = a_list[position]
+            position -= 1
+        a_list[position + 1] = current_value
+    return a_list
+
+
+
 
 
 # ── TODO 4: Counted Versions ────────────────────────────────────
@@ -125,7 +148,23 @@ def bubble_sort_counted(a_list):
         bubble_sort_counted([3, 1, 2])
         → ([1, 2, 3], 3, 2)
     """
-    pass  # TODO: implement this
+    comparisons = 0
+    data_moves = 0
+    for i in range(len(a_list) - 1):
+        sorted = True
+        for j in range(len(a_list) - 1 - i):
+            comparisons += 1
+            if a_list[j] > a_list[j+1]:
+                temp = a_list[j+1]
+                a_list[j + 1] = a_list[j]
+                a_list[j] = temp
+                sorted = False
+                data_moves += 1
+            if j == len(a_list) - 1 - i and sorted == True: #if we reach the end of the sort and sorted has not benn set to False, we return immediately
+                return a_list
+
+        
+    return (a_list,comparisons,data_moves)
 
 
 def insertion_sort_counted(a_list):
@@ -150,4 +189,21 @@ def insertion_sort_counted(a_list):
         insertion_sort_counted([3, 1, 2])
         → ([1, 2, 3], 3, 4)
     """
-    pass  # TODO: implement this
+    comparisons = 0
+    data_moves = 0
+    for i in range(1, len(a_list)):
+        current_value = a_list[i]
+        position = i - 1
+        
+        runs = 0
+        while position >= 0:
+            comparisons += 1
+            if a_list[position] > current_value:
+                a_list[position + 1] = a_list[position]
+                data_moves +=1
+                position -= 1
+            else:
+                break
+        a_list[position + 1] = current_value
+        data_moves += 1
+    return (a_list,comparisons,data_moves)
