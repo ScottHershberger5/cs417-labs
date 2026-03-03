@@ -36,7 +36,13 @@ def bubble_sort(a_list):
     Returns:
         The same list, now sorted in ascending order.
     """
-    pass  # TODO: implement this
+    for i in range(len(a_list) - 1):
+        for j in range(len(a_list) - 1 - i):
+            if a_list[j] > a_list[j+1]:
+                temp = a_list[j+1]
+                a_list[j + 1] = a_list[j]
+                a_list[j] = temp
+    return a_list
 
 
 # ── TODO 2: Short Bubble Sort ───────────────────────────────────
