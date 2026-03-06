@@ -127,11 +127,13 @@ def merge_sort(a_list):
     # Combine the sorted left and right halves back into a_list.
     # Initialize: i = 0, j = 0, k = 0
     # Then write the three while loops described above.
-    i = 0
-    k = 0
-    j = 0
-    while (i < len(left) and j < len(right)):
-        if left[i] <= right[j]:
+    
+    i = 0 #left lists index we are "pointed" at
+    k = 0 #index in the sorted list where we are placing the next smallest value
+    j = 0 #right lists index we are "pointed" at
+    
+    while (i < len(left) and j < len(right)): #while there are still elements in both the lists
+        if left[i] <= right[j]: #puts smaller one in front
             a_list[k] = left[i]
             i += 1
             k += 1
@@ -139,11 +141,11 @@ def merge_sort(a_list):
             a_list[k] = right[j]
             j += 1
             k += 1
-    while i < len(left):
+    while i < len(left): #goes through the left list putting left over values
         a_list[k] = left[i]
         k += 1
         i += 1
-    while j < len(right):
+    while j < len(right): #goes through the right list putting left over values
         a_list[k] = right[j]
         k += 1
         j += 1
@@ -182,8 +184,30 @@ def _partition(a_list, first, last):
     Returns:
         The index where the pivot ended up (the split point).
     """
-    pass  # TODO: implement this
+    pivot_value = a_list[first]
+    left_mark = first + 1
+    right_mark = last
+    done = False
+    while not done:
+        
+        while left_mark <= right_mark and a_list[left_mark] <= pivot_value:
+            left_mark += 1
+        while left_mark <= right_mark and a_list[right_mark] >= pivot_value:
+            right_mark -= 1
+        
+        if right_mark < left_mark:
+            done = True
+        else:
+            temp = a_list[left_mark]
+            a_list[left_mark] = a_list[right_mark]
+            a_list[right_mark] = temp
+            
 
+    temp = a_list[first]
+    a_list[first] = a_list[right_mark]
+    a_list[right_mark] = temp
+    return right_mark
+        
 
 def _quick_sort_helper(a_list, first, last):
     """Recursive quicksort. DO NOT MODIFY."""
