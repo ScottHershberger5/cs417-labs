@@ -127,8 +127,26 @@ def merge_sort(a_list):
     # Combine the sorted left and right halves back into a_list.
     # Initialize: i = 0, j = 0, k = 0
     # Then write the three while loops described above.
-
-    pass  # TODO: replace this with the merge logic
+    i = 0
+    k = 0
+    j = 0
+    while (i < len(left) and j < len(right)):
+        if left[i] <= right[j]:
+            a_list[k] = left[i]
+            i += 1
+            k += 1
+        elif right[j] <= left[i]:
+            a_list[k] = right[j]
+            j += 1
+            k += 1
+    while i < len(left):
+        a_list[k] = left[i]
+        k += 1
+        i += 1
+    while j < len(right):
+        a_list[k] = right[j]
+        k += 1
+        j += 1
 
     return a_list
 
