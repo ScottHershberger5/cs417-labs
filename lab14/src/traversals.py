@@ -77,7 +77,9 @@ def preorder(node):
 
     TODO: implement this
     """
-    pass  # TODO: implement this
+    if node == None:
+        return []
+    return [] + [node.value] + preorder(node.left) + preorder(node.right)
 
 
 # ── Task 4: Postorder Traversal (Left → Right → Self) ───────────────
