@@ -112,7 +112,12 @@ def levelorder(node):
 
     TODO: implement this
     """
-    pass  # TODO: implement this
+    queue = [node.value]
+    while queue:
+        levelorder_list += queue.pop(0)
+        queue.append(node.left)
+        queue.append(node.right)
+    return levelorder_list
 
 
 # ── Main ─────────────────────────────────────────────────────────────
