@@ -81,8 +81,6 @@ def sort_by_priority(tasks):
     for k , task in enumerate(tasks): #creating heap with arrival nums
         heapq.heappush(heap, (task[0], k, task[1]))
     
-    # heap = tasks[:]
-    # heapq.heapify(heap)
     priority_list = []
     for i in range(len(tasks)):
         priority_list.append(heapq.heappop(heap)[2])
