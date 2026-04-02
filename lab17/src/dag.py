@@ -36,6 +36,7 @@ class DAGNode:
         # TODO: Store name and initialize dependencies
         self.name = name
         self.dependencies = set()
+        
 
     def add_dependency(self, node: "DAGNode") -> None:
         """Add a dependency to this node.
@@ -55,15 +56,17 @@ class DAGNode:
         Raises:
             CycleError: If adding this dependency would create a cycle.
         """
-        if node == self.name:
-            raise CycleError() # dont know if this is right or will work
-        else:
-            self.dependencies.add(DAGNODE(node))
 
         # TODO: Reject self-loops (Task 2)
         # TODO: Reject cycles using has_ancestor (Task 4)
         # TODO: Add the dependency
-        pass
+        if node is self:
+            raise CycleError("Cannot add itself as a dependency.")
+
+        if node.has_ancestor(self):
+            raise CycleError("Adding this dependency would create a cycle.")
+
+        self.dependencies.add(node)
 
     def has_ancestor(self, target: "DAGNode") -> bool:
         """Check if target is an ancestor of this node.
@@ -88,6 +91,20 @@ class DAGNode:
         """
         # TODO: Walk the dependency chain looking for target
         #have to look from start, down to the next dependencies
+        stack = list(self.dependencies)
+        visited = set()
+
+        while stack:
+            current = stack.pop()
+
+            if current is target:
+                return True
+
+            if current not in visited:
+                visited.add(current)
+                stack.extend(current.dependencies)
+
+        return False
         
         
 
