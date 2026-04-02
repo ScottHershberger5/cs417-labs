@@ -56,8 +56,9 @@ class DAGNode:
             CycleError: If adding this dependency would create a cycle.
         """
         if node == self.name:
-            raise CycleError("")
-        self.dependencies.add(node)
+            raise CycleError() # dont know if this is right or will work
+        else:
+            self.dependencies.add(DAGNODE(node))
 
         # TODO: Reject self-loops (Task 2)
         # TODO: Reject cycles using has_ancestor (Task 4)
@@ -86,7 +87,9 @@ class DAGNode:
             True if target is reachable via dependencies, False otherwise.
         """
         # TODO: Walk the dependency chain looking for target
-        pass
+        #have to look from start, down to the next dependencies
+        
+        
 
     def __repr__(self):
         dep_names = sorted(d.name for d in self.dependencies) if hasattr(self, 'dependencies') else []
