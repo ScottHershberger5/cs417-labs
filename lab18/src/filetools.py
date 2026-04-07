@@ -32,9 +32,9 @@ def read_csv(filepath: str) -> list[dict]:
         'Alice'
     """
     # TODO: Implement this function
-    data_path = Path(__file__).resolve().parent.parent / "data" / "roster.csv"
+    # data_path = Path(__file__).resolve().parent.parent / "data" / "roster.csv"
 
-    with open(data_path, mode="r", encoding="utf-8") as csvfile:
+    with open(filepath, mode="r", encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
         dict_list = []
         for row in reader:
@@ -65,7 +65,11 @@ def read_json(filepath: str):
         92
     """
     # TODO: Implement this function
-    pass
+    
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    return data
 
 
 def write_csv(filepath: str, data: list[dict], fieldnames: list[str]) -> None:
@@ -86,7 +90,13 @@ def write_csv(filepath: str, data: list[dict], fieldnames: list[str]) -> None:
         >>> write_csv("output.csv", [{"name": "Alice", "grade": 92}], ["name", "grade"])
     """
     # TODO: Implement this function
-    pass
+    with open(filepath, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(data) 
+
+
+
 
 
 def write_json(filepath: str, data) -> None:
@@ -105,7 +115,8 @@ def write_json(filepath: str, data) -> None:
         >>> write_json("output.json", [{"name": "José", "grade": 91}])
     """
     # TODO: Implement this function
-    pass
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 
 def csv_to_json(
