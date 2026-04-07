@@ -7,6 +7,7 @@ Read, write, and convert between CSV and JSON formats.
 import csv
 import json
 from pathlib import Path
+import pytest
 
 
 def read_csv(filepath: str) -> list[dict]:
@@ -31,7 +32,17 @@ def read_csv(filepath: str) -> list[dict]:
         'Alice'
     """
     # TODO: Implement this function
-    pass
+    data_path = Path(__file__).resolve().parent.parent / "data" / "roster.csv"
+
+    with open(data_path, mode="r", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        dict_list = []
+        for row in reader:
+            dict_list.append({"name": row['name'], "email": row['email'], "grade": row['grade']})
+        return dict_list
+
+
+
 
 
 def read_json(filepath: str):
