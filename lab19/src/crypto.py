@@ -142,8 +142,9 @@ class CoinCache:
         # TODO: Task 4 — add TTL check (is the entry still fresh?)
         price = self._store.get(coin_id, {}).get("price", {}) # gets the price of the coin, if it cant returns None
         if price: 
-            self.hits += 1
-            return price #return price if it exists
+            if abs(self._store.get(coin_id, {}).get("timestamp", {}) - time.time()) <= self.ttl_seconds:
+                self.hits += 1
+                return price #return price if it exists
         self.misses += 1
         return None #return None if it doesnt
 
