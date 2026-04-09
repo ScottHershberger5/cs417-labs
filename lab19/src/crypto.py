@@ -126,7 +126,7 @@ class CoinCache:
         """
         # TODO: Task 3
         # Store {"price": price, "timestamp": time.time()} in _store
-        self._store[coin_id] = {'price': price, 'time': time.time()} # store the price and time of the coin in teh _store cache
+        self._store[coin_id] = {"price": price, "timestamp": time.time()} # store the price and time of the coin in teh _store cache
 
     def get(self, coin_id: str):
         """
@@ -140,7 +140,7 @@ class CoinCache:
         """
         # TODO: Task 3 — basic version (just check if key exists)
         # TODO: Task 4 — add TTL check (is the entry still fresh?)
-        price = self._store.get(coin_id) # gets the price of the coin, if it cant returns None
+        price = self._store.get(coin_id, {}).get("price", {}) # gets the price of the coin, if it cant returns None
         if price: 
             self.hits += 1
             return price #return price if it exists
