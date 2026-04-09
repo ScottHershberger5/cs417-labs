@@ -6,6 +6,7 @@ Fetch cryptocurrency prices from CoinGecko and cache them locally.
 
 import time
 import requests
+import json
 
 
 # CoinGecko API base URL
@@ -31,7 +32,22 @@ def get_price(coin_id: str, api_key: str) -> float:
     #    with params: ids, vs_currencies, x_cg_demo_api_key
     # 2. Check status code — raise RuntimeError if not 200
     # 3. Parse JSON and return the USD price as a float
-    pass
+    response = requests.get(
+    "https://api.coingecko.com/api/v3/simple/price",
+    params={
+        "ids": coin_id,
+        "vs_currencies": "usd",
+        "x_cg_demo_api_key": api_key
+        }
+    )
+    
+    if response.status_code != 200:
+        raise RuntimeError(response.status_code)
+
+    data = response.json()
+
+    return float(data[coin_id]["usd"])
+
 
 
 def get_prices_batch(coin_ids: list, api_key: str) -> dict:
