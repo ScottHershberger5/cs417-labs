@@ -150,19 +150,63 @@ def submit_async(
 
 
 class SmartClient:
-    """A client that tries sync first and falls back to async.
-
-    Usage:
-        client = SmartClient(base_url="http://localhost:8000")
-        result = client.submit("alice", 19)
-    """
+    """A client that tries sync first, then falls back to async."""
 
     def __init__(self, base_url: str = "http://localhost:8000", timeout: float = 2):
-        # TODO: Implement
-        
-        pass
+        self.base_url = base_url
+        self.timeout = timeout
 
     def submit(self, student: str, lab: int) -> dict:
-        """Submit a grading request. Tries sync first, falls back to async."""
-        
-        pass
+        submission_id = f"{student}-lab{lab}"
+
+        # -------------------------
+        # 1. Try synchronous path
+        # -------------------------
+        sync_url = f"{self.base_url}/grade"
+        payload = {
+            "student": student,
+            "lab": lab,
+            "submission_id": submission_id
+        }
+
+        try:
+            response = requests.post(sync_url, json=payload, timeout=self.timeout)
+
+            if response.status_code == 200:
+                return response.json()
+
+        except requests.exceptions.Timeout:
+            # fall through to async
+            pass
+
+        # -------------------------
+        # 2. Fallback to async
+        # -------------------------
+        async_url = f"{self.base_url}/grade-async"
+
+        response = requests.post(async_url, json=payload)
+
+        if response.status_code != 202:
+            raise RuntimeError("async request failed")
+
+        job_id = response.json()["job_id"]
+
+        poll_url = f"{self.base_url}/grade-jobs/{job_id}"
+
+        # -------------------------
+        # 3. Poll until complete
+        # -------------------------
+        for _ in range(20):
+            time.sleep(0.5)
+
+            r = requests.get(poll_url)
+
+            if r.status_code == 404:
+                raise RuntimeError("job not found")
+
+            data = r.json()
+
+            if data["status"] == "complete":
+                return data["result"]
+
+        raise RuntimeError("polling timed out")
