@@ -9,6 +9,7 @@ from fastapi import FastAPI
 app = FastAPI()
 
 grading_log = []
+completed = {}
 
 # ---------------------------------------------------------------------------
 # Task 1: The Naive Server
@@ -26,20 +27,25 @@ def grade_endpoint(data : dict):
     student = data["student"]
     lab = data["lab"]
     slow = data.get("slow", False)
-    score = grade(student, lab, slow)
-    grading_log.append(
-        {
-        "student": student, 
-        "lab": lab, 
-        "score": score
-        }
-        )
+    submission_id = data.get("submission_id")
     
-    return {
-        "student": student, 
-        "lab": lab, 
+    if submission_id and submission_id in completed:
+        return completed[submission_id]
+
+    score = grade(student, lab, slow)
+
+    result = {
+        "student": student,
+        "lab": lab,
         "score": score
-        }
+    }
+
+    grading_log.append(result)
+
+    if submission_id:
+        completed[submission_id] = result
+
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -80,6 +86,12 @@ def reset_log():
 # TODO: update POST /grade to check submission_id
 
 # TODO: POST /reset-completed endpoint
+
+@app.post("/reset-completed")
+def reset_completed():
+    global completed
+    completed = {}
+    return {"status": "cleared"}
 
 
 # ---------------------------------------------------------------------------
