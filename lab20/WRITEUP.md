@@ -1,0 +1,4 @@
+1. When the Client timesout, that does not mean the server has failed. The server is still processing your request. your Client has just stopped waiting.
+2. With a random idempotency key on each retry, the server wouldnt be able to pair up retries of the same function. So retries would no longer prevent duplicate grading as, the submission id would be different everytime
+3. You want to use sync, when the process on the server is fast and can respond to the client fast. You want to use async for requests that take a but longer, where you dont want to keep the client waiting and risk a unecessary retry.
+4. Hidden state existed in the server’s internal job tracking and idempotency caches, which stored progress and results that the client couldn’t directly see. It became visible through design choices like exposing job IDs with a polling endpoint and using submission IDs to surface caching behavior as part of the API contract.
