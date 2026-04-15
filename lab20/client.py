@@ -110,7 +110,38 @@ def submit_async(
     Raise RuntimeError("polling timed out") if max_polls is exceeded.
     """
     # TODO: Implement
-    pass
+    submission_id = f"{student}-lab{lab}"
+
+    url = f"{base_url}/grade-async"
+    payload = {
+        "student": student,
+        "lab": lab,
+        "submission_id": submission_id
+    }
+
+    response = requests.post(url, json=payload)
+
+    if response.status_code != 202:
+        raise RuntimeError("expected 202 Accepted")
+
+    job_id = response.json()["job_id"]
+
+    poll_url = f"{base_url}/grade-jobs/{job_id}"
+
+    for _ in range(max_polls):
+        time.sleep(poll_interval)
+
+        r = requests.get(poll_url)
+
+        if r.status_code == 404:
+            raise RuntimeError("job not found")
+
+        data = r.json()
+
+        if data["status"] == "complete":
+            return data["result"]
+
+    raise RuntimeError("polling timed out")
 
 
 # ---------------------------------------------------------------------------

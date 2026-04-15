@@ -10,6 +10,11 @@ app = FastAPI()
 
 grading_log = []
 completed = {}
+from fastapi import FastAPI, BackgroundTasks
+from fastapi.responses import JSONResponse
+import uuid
+jobs = {}
+job_submission_map = {}
 
 # ---------------------------------------------------------------------------
 # Task 1: The Naive Server
@@ -113,3 +118,66 @@ def reset_completed():
 # TODO: run_grade_job helper function
 
 # TODO: GET /grade-jobs/{job_id} endpoint
+
+def run_grade_job(job_id: str, student: str, lab: int):
+    score = grade(student, lab, slow=True)
+
+    result = {
+        "student": student,
+        "lab": lab,
+        "score": score
+    }
+
+    grading_log.append(result)
+
+    jobs[job_id] = {
+        "status": "complete",
+        "result": result
+    }
+
+@app.post("/grade-async")
+def grade_async(data: dict, background_tasks: BackgroundTasks):
+    student = data["student"]
+    lab = data["lab"]
+    submission_id = data.get("submission_id")
+
+    if submission_id and submission_id in job_submission_map:
+        job_id = job_submission_map[submission_id]
+        return JSONResponse(
+            {"job_id": job_id, "status": jobs[job_id]["status"]},
+            status_code=202
+        )
+
+    job_id = str(uuid.uuid4())
+
+    jobs[job_id] = {"status": "pending"}
+
+    if submission_id:
+        job_submission_map[submission_id] = job_id
+
+    background_tasks.add_task(run_grade_job, job_id, student, lab)
+
+    return JSONResponse(
+        {"job_id": job_id, "status": "accepted"},
+        status_code=202
+    )
+
+@app.get("/grade-jobs/{job_id}")
+def get_job(job_id: str):
+
+    if job_id not in jobs:
+        return JSONResponse(
+            {"error": "job not found"},
+            status_code=404
+        )
+
+    job = jobs[job_id]
+
+    if job["status"] == "pending":
+        return {"job_id": job_id, "status": "pending"}
+
+    return {
+        "job_id": job_id,
+        "status": "complete",
+        "result": job["result"]
+    }
