@@ -16,8 +16,21 @@ app = FastAPI()
 # endpoint that accepts {"student": ..., "lab": ...} and returns the score.
 
 # TODO: import grade from grading
+from grading import grade
 
 # TODO: POST /grade endpoint
+
+@app.post("/grade")
+def grade(data : dict):
+    student = data["student"]
+    lab = data["lab"]
+    score = grade(student, lab)
+    
+    return {
+        "student": student, 
+        "lab": lab, 
+        "score": score
+        }
 
 
 # ---------------------------------------------------------------------------

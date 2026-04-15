@@ -88,9 +88,18 @@ class SmartClient:
 
     def __init__(self, base_url: str = "http://localhost:8000", timeout: float = 2):
         # TODO: Implement
-        pass
+        self.base_url = base_url
+        self.timeout = timeout
 
     def submit(self, student: str, lab: int) -> dict:
         """Submit a grading request. Tries sync first, falls back to async."""
-        # TODO: Implement
-        pass
+        
+        url = f"{self.base_url}/grade"
+        payload = {"student": student, "lab": lab}
+        
+        response = requests.post(url, json = payload)
+
+        if response.status_code != 200:
+            raise RuntimeError(f"Request failed with status code {response.status_code}")
+
+        return response.json()
