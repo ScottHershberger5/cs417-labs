@@ -16,7 +16,15 @@ def submit(student: str, lab: int, base_url: str = "http://localhost:8000") -> d
     Return the response as a dictionary.
     """
     # TODO: Implement
-    pass
+    payload = {"student": student, "lab": lab}
+    url = f"{base_url}/grade"
+    response = requests.post(url, json = payload)
+
+    if response.status_code != 200:
+        raise RuntimeError(f"Request failed with status code {response.status_code}")
+
+    return response.json()
+    
 
 
 def submit_with_retry(
@@ -88,18 +96,10 @@ class SmartClient:
 
     def __init__(self, base_url: str = "http://localhost:8000", timeout: float = 2):
         # TODO: Implement
-        self.base_url = base_url
-        self.timeout = timeout
+        
+        pass
 
     def submit(self, student: str, lab: int) -> dict:
         """Submit a grading request. Tries sync first, falls back to async."""
         
-        url = f"{self.base_url}/grade"
-        payload = {"student": student, "lab": lab}
-        
-        response = requests.post(url, json = payload)
-
-        if response.status_code != 200:
-            raise RuntimeError(f"Request failed with status code {response.status_code}")
-
-        return response.json()
+        pass

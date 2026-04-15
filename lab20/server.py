@@ -21,7 +21,7 @@ from grading import grade
 # TODO: POST /grade endpoint
 
 @app.post("/grade")
-def grade(data : dict):
+def grade_endpoint(data : dict):
     student = data["student"]
     lab = data["lab"]
     score = grade(student, lab)
