@@ -30,8 +30,8 @@ def find_grade(roster: dict[str, int], name: str) -> int | None:
         return roster[name]
     return None
 
-roster = {"alice": 92, "bob": 85}
-grade = find_grade(roster, "charlie")
+roster1 = {"alice": 92, "bob": 85}
+grade = find_grade(roster1, "charlie")
 if grade is not None:
     print(grade + 10)
 else:
@@ -39,3 +39,19 @@ else:
 
 def format_id(value: int | str) -> str:
     return f"id-{value}"
+
+# part 4
+
+from typing import TypedDict
+
+class StudentRow(TypedDict):
+    name: str
+    email: str
+    grade: str
+
+def read_roster(path: str) -> list[StudentRow]:
+    # pretend this reads a CSV
+    return [{"name": "Alice", "email": "alice@uni.edu", "grade": "92"}]
+
+roster = read_roster("roster.csv")
+print(roster[0]["name"])   # typo!
