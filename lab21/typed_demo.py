@@ -55,3 +55,12 @@ def read_roster(path: str) -> list[StudentRow]:
 
 roster = read_roster("roster.csv")
 print(roster[0]["name"])   # typo!
+
+# part 5
+
+class User(TypedDict):
+    id: int
+    name: str
+
+def make_badge(user: User) -> str:
+    return f"#{user['id']}-{user['name']}"
