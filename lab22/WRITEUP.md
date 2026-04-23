@@ -29,3 +29,7 @@ src/solution_c.py:29: error: Incompatible return value type (got "list[tuple[str
 Found 1 error in 1 file (checked 3 source files)
 
 The benchmark numbers did confirm my rankings. A did good overall, B did great with some small inputs initially but fell off with large inputs, and C was the worst by far because it counts every item and has lots of for loops. mypy --strict caught C because the return value isnt the same as the indicated return value type hint. Regime 1 uses smaller vocab which is perfect for B, A and C fall behind B's fast sorting of small vocab and total items. Regime 2 uses larger vocab and more items in general which is where A really shines, B does good at first but then falls behind, and C cant keep up at all.
+
+Scenario 1: Yes my ranking do change, we see that B runs the best with small data sets with a limited vocab so I would put that at 1, then A 2, then C last. C will always be last unless you want to be fired.
+
+Scenario 2: My rankings will stay the same, 1 = A, 2 = B, 3 = C. B pulls ahead with small data sets, but A is more efficent in the long run and with bigger input values. So with 10,000 runs/sec, yeah I will stick with A and its capabilities. This scenario makes me worried about your rate limits, both on your network and maybe API's that you could be using, 10,000 times per sec will almost definetely be more requests then your allowed.
